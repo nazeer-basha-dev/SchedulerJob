@@ -1,0 +1,35 @@
+deployment:
+  enabled: false
+
+configData:
+  VaultConfig__VaultEndpoint: ""
+  VaultConfig__KubernetesConfig__ClusterName: ""
+  
+cronJobs:
+  enabled: true
+  defaults:
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+  dataDog:
+      enabled: true
+      # you are required to set the logging source type which should match to your programming language (csharp) or web server (nginx) for log parsing
+      # csharp, ruby, python, php, java, httpd, nginx, tomcat
+      logSource: "csharp"
+      serviceNameOverride: "scheduler-job"
+      enableDataStreamsMonitoring: true
+  jobs:
+    - name: disable-managers
+      istioEnabled: false
+      enabled: true
+      command: export DOTNET_JOBTYPE=disablemanagers && /entrypoint.sh $(cat /app/__assemblyname).dll
+      startingDeadlineSeconds: 30
+      activeDeadlineSeconds: 2700
+      backoffLimit: 2
+      schedule: "*/2 * * * *"
+
+vaultCSI:
+  enabled: false

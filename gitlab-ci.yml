@@ -1,0 +1,69 @@
+# include base templates
+include:
+  - project: ascend/sre/utilities/standard-pipeline
+    ref: main
+    file: index.yml
+
+variables:
+  # ENABLE AND DISABLE STEPS HERE
+  CONTAINER_BUILD:    "enable"
+  K8S_DEPLOY:         "enable"
+
+  # GLOBAL
+  SERVICE_NAME:            SchedulerJob
+  GLOBAL_VALUES_PATH:      values/values.global.yml
+
+  # CONVENIENCE (Can be flattened)
+  NAMESPACE_PREFIX:        efx-scheduler-job
+
+############
+## DEPLOY ##
+############
+# Deploy DEV
+  K8S_EFX_DEV_DEPLOY: enable
+  K8S_EFX_DEV_DEPLOY_NAMESPACE: ${NAMESPACE_PREFIX}-ham-dev
+  K8S_EFX_DEV_DEPLOY_VALUES_PATH: values/values.global.yml
+  K8S_EFX_DEV_DEPLOY_EXTRA_HELM_FLAGS: |
+    --debug
+    --set-string configData.Logging__LogLevel__Default=${LOG_LEVEL_DEFAULT}
+    --set-string configData.Logging__LogLevel__Microsoft=${LOG_LEVEL_MICROSOFT}
+    --set-string configData.Logging__LogLevel__System=${LOG_LEVEL_SYSTEM}
+    --set-string configData.VaultConfig__VaultEndpoint=${VAULT_ENDPOINT}
+    --set-string configData.VaultConfig__KubernetesConfig__ClusterName=${VAULT_CLUSTER_NAME}
+
+
+# Deploy QA
+  K8S_EFX_QA_DEPLOY: enable
+  K8S_EFX_QA_DEPLOY_NAMESPACE: ${NAMESPACE_PREFIX}-ham-qa
+  K8S_EFX_QA_DEPLOY_VALUES_PATH: values/values.global.yml
+  K8S_EFX_QA_DEPLOY_EXTRA_HELM_FLAGS: |
+    --debug
+    --set-string configData.Logging__LogLevel__Default=${LOG_LEVEL_DEFAULT}
+    --set-string configData.Logging__LogLevel__Microsoft=${LOG_LEVEL_MICROSOFT}
+    --set-string configData.Logging__LogLevel__System=${LOG_LEVEL_SYSTEM}
+    --set-string configData.VaultConfig__VaultEndpoint=${VAULT_ENDPOINT}
+    --set-string configData.VaultConfig__KubernetesConfig__ClusterName=${VAULT_CLUSTER_NAME}
+
+# Deploy STG
+  K8S_EFX_STG_DEPLOY: enable
+  K8S_EFX_STG_DEPLOY_NAMESPACE: ${NAMESPACE_PREFIX}-ham-stg
+  K8S_EFX_STG_DEPLOY_VALUES_PATH: values/values.global.yml
+  K8S_EFX_STG_DEPLOY_EXTRA_HELM_FLAGS: |
+    --debug
+    --set-string configData.Logging__LogLevel__Default=${LOG_LEVEL_DEFAULT}
+    --set-string configData.Logging__LogLevel__Microsoft=${LOG_LEVEL_MICROSOFT}
+    --set-string configData.Logging__LogLevel__System=${LOG_LEVEL_SYSTEM}
+    --set-string configData.VaultConfig__VaultEndpoint=${VAULT_ENDPOINT}
+    --set-string configData.VaultConfig__KubernetesConfig__ClusterName=${VAULT_CLUSTER_NAME}
+
+# Deploy PRD
+  K8S_EFX_PRD_DEPLOY: enable
+  K8S_EFX_PRD_DEPLOY_NAMESPACE: ${NAMESPACE_PREFIX}-leb-prd
+  K8S_EFX_PRD_DEPLOY_VALUES_PATH: values/values.global.yml
+  K8S_EFX_PRD_DEPLOY_EXTRA_HELM_FLAGS: |
+    --debug
+    --set-string configData.Logging__LogLevel__Default=${LOG_LEVEL_DEFAULT}
+    --set-string configData.Logging__LogLevel__Microsoft=${LOG_LEVEL_MICROSOFT}
+    --set-string configData.Logging__LogLevel__System=${LOG_LEVEL_SYSTEM}
+    --set-string configData.VaultConfig__VaultEndpoint=${VAULT_ENDPOINT}
+    --set-string configData.VaultConfig__KubernetesConfig__ClusterName=${VAULT_CLUSTER_NAME}

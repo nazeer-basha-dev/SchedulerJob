@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "SchedulerJob": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "local",
+        "DOTNET_JOBTYPE": "enablemanagers"
+      }
+    }
+  }
+}
